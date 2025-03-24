@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Стратегия торговли - Технический анализ</title>
+    <style>
+        @keyframes neonGlow {
+            0% { box-shadow: 0 0 10px #ff0000; }
+            25% { box-shadow: 0 0 20px #ff8000; }
+            50% { box-shadow: 0 0 30px #ffff00; }
+            75% { box-shadow: 0 0 20px #00ff00; }
+            100% { box-shadow: 0 0 10px #00ffff; }
+        }
+        
+        @keyframes movingLines {
+            0% { transform: translateY(-100%); opacity: 0.5; }
+            50% { transform: translateY(100%); opacity: 1; }
+            100% { transform: translateY(-100%); opacity: 0.5; }
+        }
+        
+        @keyframes colorShift {
+            0% { background: linear-gradient(180deg, #ff0000, #ff8000, #ffff00); }
+            50% { background: linear-gradient(180deg, #00ff00, #00ffff, #ff00ff); }
+            100% { background: linear-gradient(180deg, #ff0000, #ff8000, #ffff00); }
+        }
+
+        body {
+            background-color: #0f0f0f;
+            color: #00ff00;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background-color: #121212;
+            border-radius: 10px;
+            animation: neonGlow 3s infinite alternate;
+        }
+        select, input, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #222;
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+        }
+        button {
+            transition: all 0.3s ease-in-out;
+        }
+        button:hover {
+            background-color: #00ff00;
+            color: #000;
+            box-shadow: 0 0 20px #00ff00;
+        }
+        .line {
+            position: absolute;
+            width: 5px;
+            height: 100vh;
+            animation: movingLines 8s infinite ease-in-out, colorShift 6s infinite alternate;
+        }
+        .line.left {
+            left: 5px;
+        }
+        .line.right {
+            right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="line left"></div>
+    <div class="line right"></div>
+    <div class="container">
+        <h1>Стратегия торговли - Технический анализ</h1>
+        
+        <label>Тренд по всем таймфреймам</label>
+        <select id="trend">
+            <option value="Вверх">Вверх</option>
+            <option value="Вниз">Вниз</option>
+            <option value="Неопределенный">Неопределенный</option>
+        </select>
+        
+        <label>Объёмы</label>
+        <select id="volumes">
+            <option value="Растут">Растут</option>
+            <option value="Падают">Падают</option>
+            <option value="Дивергенция покупателей">Дивергенция со стороны покупателей</option>
+            <option value="Дивергенция продавцов">Дивергенция со стороны продавцов</option>
+        </select>
+        
+        <label>Процент покупателей в свече</label>
+        <input type="number" id="buyers" placeholder="Введите процент" value="80">
+        
+        <h2>Вывод</h2>
+        <p id="result">Ожидание...</p>
+        
+        <button onclick="analyze()">Анализировать</button>
+    </div>
+
+    <script>
+        function analyze() {
+            let trend = document.getElementById("trend").value;
+            let volumes = document.getElementById("volumes").value;
+            let buyers = parseInt(document.getElementById("buyers").value);
+            let result = "";
+            
+            if (trend === "Неопределенный") {
+                result = "Пропускаем валюту";
+            } else if (volumes === "Дивергенция продавцов" && trend === "Вверх" && buyers > 50) {
+                result = "Цена пойдет вверх";
+            } else if (volumes === "Дивергенция покупателей" && trend === "Вниз" && buyers < 50) {
+                result = "Цена пойдет вниз";
+            } else if (volumes === "Растут" && trend === "Вверх") {
+                result = "Заходим на повышение";
+            } else if (volumes === "Падают" && trend === "Вниз") {
+                result = "Заходим на понижение";
+            } else {
+                result = "Нет четкого сигнала";
+            }
+            
+            document.getElementById("result").innerText = result;
+        }
+    </script>
+</body>
+</html>
